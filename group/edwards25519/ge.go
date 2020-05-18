@@ -54,11 +54,16 @@ func (p *projectiveGroupElement) Double(r *completedGroupElement) {
 }
 
 func (p *projectiveGroupElement) ToBytes(s *[32]byte) {
-	var recip, x, y fieldElement
+	var recip fieldElement
+	x := p.X
+	y := p.Y
 
-	feInvert(&recip, &p.Z)
-	feMul(&x, &p.X, &recip)
-	feMul(&y, &p.Y, &recip)
+	feOne(&recip)
+	if p.Z != recip {
+		feInvert(&recip, &p.Z)
+		feMul(&x, &p.X, &recip)
+		feMul(&y, &p.Y, &recip)
+	}
 	feToBytes(s, &y)
 	s[31] ^= feIsNegative(&x) << 7
 }
@@ -97,11 +102,16 @@ func (p *extendedGroupElement) ToProjective(r *projectiveGroupElement) {
 }
 
 func (p *extendedGroupElement) ToBytes(s *[32]byte) {
-	var recip, x, y fieldElement
+	var recip fieldElement
+	x := p.X
+	y := p.Y
 
-	feInvert(&recip, &p.Z)
-	feMul(&x, &p.X, &recip)
-	feMul(&y, &p.Y, &recip)
+	feOne(&recip)
+	if p.Z != recip {
+		feInvert(&recip, &p.Z)
+		feMul(&x, &p.X, &recip)
+		feMul(&y, &p.Y, &recip)
+	}
 	feToBytes(s, &y)
 	s[31] ^= feIsNegative(&x) << 7
 }

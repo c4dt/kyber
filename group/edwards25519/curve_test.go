@@ -1,6 +1,7 @@
 package edwards25519
 
 import (
+	"fmt"
 	"math"
 	"testing"
 
@@ -44,3 +45,16 @@ func BenchmarkPointBaseMul(b *testing.B) { groupBench.PointBaseMul(b.N) }
 func BenchmarkPointPick(b *testing.B)    { groupBench.PointPick(b.N) }
 func BenchmarkPointEncode(b *testing.B)  { groupBench.PointEncode(b.N) }
 func BenchmarkPointDecode(b *testing.B)  { groupBench.PointDecode(b.N) }
+
+func BenchmarkMyPoints(b *testing.B){
+	fmt.Println(1)
+	base := tSuite.Point().Base()
+	buf, _ := base.MarshalBinary()
+	p := tSuite.Point()
+	p.UnmarshalBinary(buf)
+	fmt.Println(2)
+	for i := 0; i < b.N; i++{
+		p.MarshalBinary()
+	}
+	fmt.Println(3)
+}
